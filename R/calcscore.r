@@ -12,7 +12,7 @@
 # @return A list containing the different components of each score. List
 # dimensions depend on the index calculated.
 
-calcscore<-function(abundances, taxonlist, index){
+calcscore<-function(abundances, taxonlist){
 
   # recombine taxon list and abundances
   sampledata<-as.data.frame(cbind.data.frame(taxonlist, abundances))
@@ -22,13 +22,11 @@ calcscore<-function(abundances, taxonlist, index){
 
   # check that there are any taxa present in the sample, then extract scores
   if (nrow(taxapresent)!=0){
-    if (index=="BMWP_CR"){
-      samplescores<-extractrows(taxapresent, indextable)
-      scorelist<-c(sum(samplescores$BMWP_CR, na.rm=TRUE))
-    }
+    samplescores<-extractrows(taxapresent, indextable)
+    scorelist<-c(sum(samplescores$BMWP_CR, na.rm=TRUE))
 
   return(scorelist)
-  # this closes the nrows loop
+  # this closes the nrows if
   }
   # this is the function closure
 }

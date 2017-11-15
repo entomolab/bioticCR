@@ -1,5 +1,5 @@
 #' Calculate the Costa Rican BMWP biotic index for freshwater invertebrate samples
-#' @description Calculates theCosta Rican version of the BMWP freshwater invertebrate biotic indices
+#' @description Calculates the Costa Rican version of the BMWP freshwater invertebrate biotic index.
 #'
 #' @param df A dataframe containing list of taxon names and their abundances
 #' in samples, along with sample identifiers.  Default format is for taxon
@@ -17,25 +17,39 @@
 #' rows.
 #' @export calcBMWP_CR
 #' @examples
-#' # NEEDS UPDATING!
 #'
-#' # calculate the BMWP index for this dataset
-#' # 'index' and 'type' do not have to specified as defaults are used
-#' # ("BMWP" and "num")
+#' # calculate the Costa Rican version of the BMWP index for
+#' # the built in 'almond' dataset
+#' # 'type' does not have to specified as default is used
+#' # ("num")
 #'
-#' calcindex(almond)
+#' calcBMWP_CR(almond)
 #'
-#' # calculate the PSI index for this dataset
-#' # type does not have to specified as default is used ("num")
+#' # example of processing data in alphabetic log abundance categories
+#' # using the 'type' argument
 #'
-#' calcindex(almond, "PSI")
+#' # 'braidburn' dataset contains alphabetic log category data
+#' # see ?braidburn for details
 #'
-
+#' # calculate the Costa Rican BMWP index for this dataset
+#'
+#' calcBMWP_CR(braidburn, "alpha")
+#'
+#' # example of processing data in numeric log abundance categories
+#' # using the 'type' argument
+#'
+#' # 'greenburn' dataset contains numeric log category data
+#' # see ?greenburn for details
+#'
+#' # calculate the Costa Rican BMWP index for this dataset
+#'
+#' calcBMWP_CR(greenburn, "log")
+#'
 calcBMWP_CR<-function(df, type="num"){
-  
+
   # explicitly specify index here
-  index<-"BMWP_CR"
-  
+#  index<-"BMWP_CR"
+
   # check that a correct type has been specified
   TYPES<-c("num", "log", "alpha")
   datatype<-pmatch(type, TYPES)
@@ -108,7 +122,7 @@ calcBMWP_CR<-function(df, type="num"){
   if (ncol(df)==2){
 
     # calculate scores
-    output<-calcscore(samples, taxonlist=taxonlist, index=index)
+    output<-calcscore(samples, taxonlist=taxonlist)
 
     # transpose output
     output<-t(output)
@@ -118,7 +132,7 @@ calcBMWP_CR<-function(df, type="num"){
   }
   # if there is more than one sample, apply across columns
   else{
-    output<-apply(samples, 2, calcscore, taxonlist=taxonlist, index=index)
+    output<-apply(samples, 2, calcscore, taxonlist=taxonlist)
   }
 
   # only need to bind rows for multiple samples
@@ -128,10 +142,8 @@ calcBMWP_CR<-function(df, type="num"){
   }
 
   # add column names depending on index
-  if (index=="BMWP_CR"){
-    colnames(output)<-c("BMWP_CR")
-  }
-  
+  colnames(output)<-c("BMWP_CR")
+
   # add on sample identifier column and set row names to null
   output<-as.data.frame(cbind.data.frame(row.names(output), output))
   row.names(output)<-NULL
